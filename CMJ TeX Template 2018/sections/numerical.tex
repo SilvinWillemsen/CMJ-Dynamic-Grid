@@ -24,7 +24,7 @@ Expanding the operators as in %the Eqs. in
 \begin{equation}\label{eq:updateEq}
     u_l^{n+1} = 2u_l^n-u_l^{n-1} + \lambda^2 \left(u_{l+1}^n-2u_l^n + u_{l-1}^n\right),
 \end{equation}
-saying that $u$ at the next time index ($n+1$) can be calculated using only values of $u$ at the current ($n$) and previous time indices ($n-1$). This update can be implemented in software, such as {\tt MATLAB} or {\tt C++}. Here,
+saying that $u$ at the next time index ($n+1$) can be calculated using only values of $u$ at the current ($n$) and previous time indices ($n-1$). This update can be implemented in software, such as {\tt MATLAB} or {\tt C++}. In Eq. \eqref{eq:updateEq},
 \begin{equation}\label{eq:lambdaDef}
     \lambda = \frac{ck}{h}
 \end{equation}
