@@ -54,7 +54,7 @@ Discretising continuous equations using numerical methods places limits on the p
 \begin{equation}\label{eq:CFL}
     \lambda \leq 1,
 \end{equation}
-which is referred to as the Courant-Friedrichs-Lewy (CFL) stability condition \cite{Strikwerda1989}. The closer $\lambda$ is to this condition, the higher the quality of the simulation (see Section \ref{sec:quality}) and if $\lambda = 1$, Eq. \eqref{eq:updateEq} provides an exact solution to Eq. \eqref{eq:1dwave} %(this is true for the 1D wave equation)
+which is referred to as the Courant-Friedrichs-Lewy (CFL) stability condition \citep*{Strikwerda1989}. The closer $\lambda$ is to this condition, the higher the quality of the simulation (see Section \ref{sec:quality}) and if $\lambda = 1$, Eq. \eqref{eq:updateEq} provides an exact solution to Eq. \eqref{eq:1dwave} %(this is true for the 1D wave equation)
 (see Figures \ref{fig:lambda1} and \ref{fig:lambda0.9}). If $\lambda > 1$ the system will become unstable (see Figure \ref{fig:lambda1.001}).
 \begin{figure}[h]
     \centering
@@ -95,7 +95,7 @@ As mentioned above, the Courant number $\lambda$ decides the quality of the simu
     \label{fig:bandWidths}}
 \end{figure}
 %
-By analysing the scheme in Eq. \eqref{eq:updateEq}, it can be shown that the maximum frequency produced by the system can be calculated using \cite[Chap. 6]{bilbao2009}
+By analysing the scheme in Eq. \eqref{eq:updateEq}, it can be shown that the maximum frequency produced by the system can be calculated using \citep[Chap. 6]{bilbao2009}
 \begin{equation}\label{eq:fmax}
     f_\text{max} = \frac{f_\text{s}}{\pi} \sin^{-1}(\lambda).
 \end{equation}
