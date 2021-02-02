@@ -33,11 +33,11 @@ Another method is to add and remove points at the boundary using an interpolated
 Although informal testing shows that adding points to the grid can happen smoothly, removing points smoothly is more challenging. This is due to the fact that the grid point at the boundary will be moving right before it is removed and its displacement needs to (somehow) smoothly be reduced to 0 to satisfy the fixed boundary condition in Eq. \eqref{eq:contDirichlet}. %\SWcomment[$\leftarrow$ if simply supported condition is mentioned here] Even though the $\delta_{xx}u$ part of this condition can be easily satisfied, the $u=0$ part can not.
 
 \subsection{Proposed Method}\label{sec:proposedMethod}
-This section introduces the proposed method of dynamically and smoothly changing the grid to account for dynamic parameter changes. To avoid the issues of adding and removing points at the boundary due to boundary conditions, they can be added or removed along the grid instead. For the sake of simplicity, the location is chosen to be the center of the system. %\SWcomment[At the end of this section, the location exhibiting the best behaviour will be shown.] 
+This section introduces the proposed method of dynamically and smoothly changing the grid to account for dynamic parameter changes. To avoid the issues of adding and removing points at the boundary due to boundary conditions, they can be added or removed along the grid instead. \SWcomment[$\leftarrow$ Revise sentence if iterations are removed] For the sake of simplicity, the location is chosen to be the center of the system. %\SWcomment[At the end of this section, the location exhibiting the best behaviour will be shown.] 
 In the following, the location of a grid point (in m from the left boundary) $i$ (such as $i = u_0$) at time index $n$ is denoted by $x_i^n$. 
 
 \subsubsection{System Setup}\label{sec:systSetup}
-Consider a grid function, $u_l^n$ with integer $M_u = \lceil 0.5L/ck\rceil $ (or simply $M$ below for brevity) \SWcomment[($\lceil \cdot \rceil$ denoting the ceiling operation)] and $w_l^n$ with integer $M_w = \lfloor 0.5L/ck\rfloor$, i.e., half the number of points allowed by the stability condition, plus one for overlap (see Figure \ref{fig:twoFreeStrings}). The following boundary conditions are then imposed:
+Consider a grid function, $u_l^n$ with integer $M = \lceil 0.5L/ck\rceil $ \SWcomment[($\lceil \cdot \rceil$ denoting the ceiling operation)] and $w_l^n$ with integer $M_w = \lfloor 0.5L/ck\rfloor$, i.e., half the number of points allowed by the stability condition, plus one for overlap (see Figure \ref{fig:twoFreeStrings}). The following boundary conditions are then imposed:
 \begin{subequations}\label{eq:halfStringBoundaryCond}
     \begin{align}
         u_0^n = w_{M_w}^n &= 0,\quad \text{(Dirichlet)}\label{eq:halfStringBoundaryCondDirichlet}\\
@@ -54,19 +54,19 @@ i.e., the outer boundaries are fixed and the inner boundaries are free.
 
 \begin{figure}[hp]
     \centering
-    \subfloat[]{\label{fig:twoFreeStrings}{ \includegraphics[width=0.8\columnwidth]{twoFreeStringGridMove}}}\\
-    \subfloat[]{\label{fig:twoFreeStringsGridMoveZoomed}{ \includegraphics[width=0.8\columnwidth]{twoFreeStringGridMoveZoomed}}}\\
-    \subfloat[]{\label{fig:twoFreeStringsGridZoomed2}{ \includegraphics[width=0.8\columnwidth]{twoFreeStringGridMoveZoomed2}}}
-    \caption{Illustration of the proposed method. In all figures, the x-axis shows the location (in m) of the respective grid points (fx. $x_{u_l^n}$), but the $x$ and $n$ are omitted for brevity. (a) Locations of the states of two (1D wave) systems connected at the inner boundary ($N = 30$, $x_{u_M}^n = x_{w_0}^n$). (b) When $c$ -- and consequently $h$ -- are decreased and the positions of the grid points change ($N = 30.5$, $x_{u_M}^n \neq x_{w_0}^n$). (c) Figure \ref{fig:twoFreeStrings} zoomed-in around $x_{u_M}^n$ and $x_{w_0}^n$. The states at the inner boundaries $u_M^n$ and $w_0^n$ are shown together with virtual grid points $u_{M+1}^n$ and $w_{-1}^n$.}
+    \subfloat[]{\label{fig:twoFreeStrings}{ \includegraphics[width=0.8\columnwidth]{twoFreeStrings}}}\\
+    \subfloat[]{\label{fig:twoFreeStringsGridMove}{ \includegraphics[width=0.8\columnwidth]{twoFreeStringGridMove}}}\\
+    \subfloat[]{\label{fig:twoFreeStringsGridZoomed}{ \includegraphics[width=0.8\columnwidth]{twoFreeStringGridMoveZoomed2}}}
+    \caption{Illustration of the proposed method. In all figures, the x-axis shows the location (in m) of the respective grid points (fx. $x_{u_l^n}$), but the $x$ and $n$ are omitted for brevity. (a) Locations of the states of two (1D wave) systems connected at the inner boundary ($N = 30$, $x_{u_M}^n = x_{w_0}^n$). (b) When $c$ -- and consequently $h$ -- are decreased and the positions of the grid points change ($N = 30.5$, $x_{u_M}^n \neq x_{w_0}^n$). (c) Figure \ref{fig:twoFreeStringsGridMove} zoomed-in around $x_{u_M}^n$ and $x_{w_0}^n$. The states at the inner boundaries $u_M^n$ and $w_0^n$ are shown together with virtual grid points $u_{M+1}^n$ and $w_{-1}^n$.}
 \end{figure}
 %
-The systems can then be connected at the inner boundaries ($u_M^n$ and $w_0^n$) using a rigid connection, i.e. \SWcomment[(only valid if $x_{u_M}^n = x_{w_0}^n$)],
+Grid functions $u_l^n$ and $w_l^n$ can then be placed in line with each other with the inner boundaries $u_M^n$ and $w_0^n$ overlapping, i.e., $x_{u_M}^n = x_{w_0}^n$, and the outer boundaries located at $x_{u_0} = 0$ and $x_{w_{M_w}} = L$. The systems can then be connected using a rigid connection
 \begin{equation}\label{eq:rigid}
     u_M^n = w_0^n,\quad \forall n.
 \end{equation}
-Essentially, the complete system is divided into two separate systems connected at the inner boundary. 
+To sum up, a grid function with $N = \lfloor L/h\rfloor$ (as per Eq. \eqref{eq:numberOfIntervals}) is divided into two separate subsystems connected at the inner boundary. Even though there is an extra grid point present, the behaviour of the new system should be identical to that of the original system. This will be proved below.
 
-With these boundary conditions imposed, the following, state vectors can be defined:
+With the above boundary conditions imposed, the following state vectors can be defined:
 \begin{equation}
     \begin{aligned}\label{eq:separateStateVectors}
      \mathbf{u}^n &= [u_1^n, \hdots, u_M^n]^T, \\
@@ -80,22 +80,30 @@ with $T$ denoting the transpose operation, and have $M$ and $M_{w}$ points respe
         \mathbf{w}^n
     \end{bmatrix}.
 \end{equation}
-Note that the vectors in \eqref{eq:separateStateVectors} and \eqref{eq:fullState} also exist at the next ($n+1$) and previous ($n-1$) time indices. The system of FDSs will now be
+Note that the vectors in \eqref{eq:separateStateVectors} and \eqref{eq:fullState} also exist at the next ($n+1$) and previous ($n-1$) time indices. 
+
+Using the above grid functions in the context of the 1D wave equation, system of FDSs can be defined as
 \begin{equation}
     \begin{cases}\label{eq:systemHalfStrings}
-        \delta_{tt}u_l^n = c^2\delta_{xx}u_l^n + J(x_{u_M}^n)F\\
-        \delta_{tt}w_l^n = c^2\delta_{xx}w_l^n - J(x_{w_0}^n)F
+        \delta_{tt}u_l^n = c^2\delta_{xx}u_l^n + J_u(x_{u_M}^n)F\\
+        \delta_{tt}w_l^n = c^2\delta_{xx}w_l^n - J_w(x_{w_0}^n)F
     \end{cases}
 \end{equation}
-with spreading operator
+with spreading operators
 \begin{equation}
-    J(x_i) =
+    J_u(x_i) =
     \begin{cases}
         \frac{1}{h}, & l = l_i = \lfloor x_i/h\rfloor\\
         0,& \text{otherwise}
     \end{cases}
+    \quad\text{and}\quad
+    J_w(x_i) =
+    \begin{cases}
+        \frac{1}{h}, & l = l_i = \lfloor x_i/h \rfloor - M\\
+        0,& \text{otherwise}
+    \end{cases}
 \end{equation}
-and the effect of the connection \SWcomment[(``connection force", but not really as it isn't in N)] $F$ (in m$^2$/s$^2$).
+applying the effect of the connection \SWcomment[(``connection force", but not really as it isn't in N)] $F$ (in m$^2$/s$^2$) to grid points $u_M^n$ and $w_0^n$ respectively.
 %
 Expanding the spatial operators in system \eqref{eq:systemHalfStrings} at inner boundaries $u_M^n$ and $w_0^n$, recalling the Neumann condition in  \eqref{eq:halfStringBoundaryCondNeumann} and the definition for the virtual grid points needed for this condition in Eq. \eqref{eq:neumannSolution} yields
 \begin{equation}\label{eq:expandedSystem}
@@ -104,7 +112,7 @@ Expanding the spatial operators in system \eqref{eq:systemHalfStrings} at inner 
         \delta_{tt}w_0^n = \frac{c^2}{h^2}(2w_1^n-2w_0^n) - \frac{1}{h}F.
     \end{cases}
 \end{equation}
-Because of Eq. \eqref{eq:rigid}, it is also true that $\delta_{tt}u_M^n = \delta_{tt}w_0^n$, and $F$ can be calculated by setting the right side of the equations in \eqref{eq:systemHalfStrings} equal to each other:
+Because of Eq. \eqref{eq:rigid}, it is also true that $\delta_{tt}u_M^n = \delta_{tt}w_0^n, \ \forall n$, and $F$ can be calculated by setting the right side of the equations in \eqref{eq:expandedSystem} equal to each other:
 \begin{align*}
      \frac{c^2}{h^2}(2u_{M-1}^n-2u_M^n) + \frac{1}{h} F&= 
      \frac{c^2}{h^2}(2w_1^n-2w_0^n) - \frac{1}{h} F\nonumber\\
@@ -118,7 +126,7 @@ Substituting this into system \eqref{eq:expandedSystem} after expansion of the s
     w^{n+1}_0 = 2w_0^n - w_0^{n-1} + \lambda^2(u_{M-1}^n-2w_0^n+w_1^n)\label{eq:resultw0}
 \end{subnumcases}
 % \end{equation}
-which, (again, recalling Eq. \eqref{eq:rigid}) are indeed equivalent expressions for the connected point. Here, $w_1^n$ in Eq. \eqref{eq:resultUM} acts as virtual grid point $u_{M+1}^n$ and $u_{M-1}^n$ in \eqref{eq:resultw0} as virtual grid point $w_{-1}^n$, essentially connecting the two systems using the state of one in the update of the other.
+which, (again, recalling Eq. \eqref{eq:rigid}) are indeed equivalent expressions for the connected point and is necessary to satisfy the rigid connection. Here, $w_1^n$ in Eq. \eqref{eq:resultUM} acts as virtual grid point $u_{M+1}^n$ and $u_{M-1}^n$ in \eqref{eq:resultw0} as virtual grid point $w_{-1}^n$, essentially connecting the two systems using the state of one in the update of the other.
 
 \subsubsection{Changing the Grid}
 The previous section describes the case in which the stability condition is satisfied with equality, i.e, when $1/ck$ is an integer and $x_{u_M}^n = x_{w_0}^n$. The locations of the outer boundaries $x_{u_0}^n$ and $x_{w_{M_w}}^n$ are fixed, i.e.
@@ -132,7 +140,7 @@ If the wave speed $c$ is then decreased, and consequently the grid spacing $h$ a
 % \caption{\label{fig:twoFreeStringsGridMove}{When the grid changes ($N = 30.5$). The x-axis shows the location (in m) of the respective grid points (fx. $x_{u_l^n}$), but the $x$ is omitted for clarity.}}
 % \end{figure}
 %
-As mentioned above, the state of $\mathbf{w}^n$ (from \eqref{eq:separateStateVectors}) can be used to calculate the virtual grid point needed at the right boundary of $\mathbf{u}^n$ and vice versa. If the inner boundaries are not overlapping (i.e., $x^n_{u_M} \neq x^n_{w_0}$) a Lagrangian interpolator $I(x_i)$ at location $x_i$ from the left boundary (in m) can be used to calculate the value of this virtual grid point. The interpolator $I$ is a row-vector the size of $\mathbfcal{U}^n$ (from Eq. \eqref{eq:fullState}) its values depending on what interpolation order is used. In the following, the distance between the inner boundaries is defined as
+As mentioned above, the state of $w_l^n$ can be used to calculate virtual grid point needed at the right boundary of $u_l^n$ and vice versa. If the inner boundaries are not overlapping (i.e., $x^n_{u_M} \neq x^n_{w_0}$) a Lagrangian interpolator $I(x_i)$ at location $x_i$ from the left boundary (in m) can be used to calculate the value of this virtual grid point (also see Figure \ref{fig:twoFreeStringsGridZoomed} for reference). The interpolator $I$ is a row-vector the size of $\mathbfcal{U}^n$ (from Eq. \eqref{eq:fullState}) its values depending on what interpolation order is used. In the following, the distance between the inner boundaries normalised with $h$ is defined as
 \begin{equation}\label{eq:alphaDef}
     \alpha = \alpha^n = \frac{x^n_{w_0} - x^n_{u_M}}{h}\,,
 \end{equation}
@@ -157,20 +165,22 @@ If linear interpolation is used,
 \begin{equation}
     I_1(x_i) = 
     \begin{cases}
-        (1-\alpha) & m = m_i \\\alpha & m = m_i + 1\\
-        0 & \text{otherwise}
+        (1-\alpha), & m = m_i \\
+        \alpha, & m = m_i + 1\\
+        0, & \text{otherwise}
     \end{cases}
 \end{equation}
 and
-\begin{equation}
+\begin{equation}\label{eq:linearFlip}
     I_1^\flip(x_i) = 
     \begin{cases}
-        \alpha & m = m_i^\flip \\(1-\alpha) & m = m_i^\flip + 1\\
+        \alpha, & m = m_i^\flip \\
+        (1-\alpha), & m = m_i^\flip + 1\\
         0 & \text{otherwise}
     \end{cases}
 \end{equation}
 \end{subequations}
-with $m_i = \lfloor x_i/h\rfloor$ and $m_i^\flip = \lfloor x_i/ h+(1-\alpha) \rfloor$. The shift in the latter is necessary to transform the location to the right indices of $\mathbfcal{U}^n$. \SWcomment[$\leftarrow$ more explanation here] Substituting \eqref{eq:linearInterp} into \eqref{eq:interpolationGeneral} yields
+with $m_i = \lfloor x_i/h\rfloor$ and $m_i^\flip = \lfloor x_i/ h+(1-\alpha) \rfloor$. The shift in the latter is necessary to transform the location to the right indices of $\mathbfcal{U}^n$. \SWcomment[$\leftarrow$ more explanation here] Substituting \eqref{eq:linearInterp} into \eqref{eq:interpolationGeneral} and expanding yields
 \begin{subequations}
     \begin{align}
         u_{M+1}^n &= I_1^\flip(x^n_{u_{M+1}})\mathbfcal{U}^n = \alpha w_0^n
@@ -178,27 +188,34 @@ with $m_i = \lfloor x_i/h\rfloor$ and $m_i^\flip = \lfloor x_i/ h+(1-\alpha) \rf
         w_{-1}^n &= I_1(x^n_{w_{-1}})\mathbfcal{U}^n = (1-\alpha)u_{M-1}^n + \alpha u_M^n.
     \end{align}
 \end{subequations}
-
-Also see Figure \ref{fig:twoFreeStringsGridZoomed}.
 % \begin{figure}[h]
 % \centerline{\includegraphics[width=\columnwidth]{twoFreeStringGridMoveZoomed} }
 % \caption{\label{fig:twoFreeStringsGridZoomed}{When the grid changes (zoomed). The states at the inner boundaries $u_M$ and $w_0$ are shown together with virtual grid points $u_{M+1}$ and $w_{-1}$.}}
 % \end{figure}
 %
-Using $I_1$, analysis of the output shows that the expected fundamental frequency $f_0$ is slightly higher when interpolation needs to happen than the one expected when using Eq. \eqref{eq:fundamentalFreq}. Furthermore, modes higher than $f_\text{s} / 4$ would follow an odd pattern up when decreasing the wavespeed, opposite of what is expected.
+Using $I_1$, analysis of the output shows that the expected fundamental frequency $f_0$ is slightly higher when interpolation needs to happen than the one expected when using Eq. \eqref{eq:fundamentalFreq}. Furthermore, modes higher than $f_\text{s} / 4$ would follow an odd pattern up when decreasing the wavespeed, opposite of what is expected. \SWcomment[$\leftarrow$ didn't know where (or whether) to include this.]
 
 One could extend the range of interpolation by one point to each side, using a cubic Lagrange interpolator instead. Though this would require $w_{-1}^n$ to calculate $u_{M+1}^n$ and vice versa, it is possible to solve this by treating the interpolation equations as a system of linear equations. Analysis of this method, though yielding a correct $f_0$ at all times, shows similar behaviour to the linear interpolation, with odd behaviour regarding to modes higher than $f_\text{s}/4$.
 
-Much better behaviour is observed when points of both $\mathbf{u}^n$ and $\mathbf{w}^n$ are used to calculate the values of the virtual grid points. This means to also use $u_M^n$ to calculate $u_{M+1}^n$ and $w_0^n$ for $w_{-1}^n$. Now, the locations of the grid points used in the interpolation are not equidistant and a custom Lagrangian interpolator needs to be created. The lowest order interpolator that can be used here is the quadratic interpolator $I_2$ and when applied to Eq. \eqref{eq:fullState} yields
+Much better behaviour is observed when points of both $u_l^n$ and $w_l^n$ are used to calculate the values of the virtual grid points. This means to also use $u_M^n$ to calculate $u_{M+1}^n$ and $w_0^n$ for $w_{-1}^n$. Now, the locations of the grid points used in the interpolation are not equidistant and a custom Lagrangian interpolator needs to be created. The lowest order interpolator that can be used here is the quadratic interpolator $I_2$
+\begin{equation}
+    I_2(x_i) =
+    \begin{cases}
+        -(\alpha-1)/(\alpha + 1), & m = m_i-1\\
+        1 & m = m_i\\
+        (\alpha-1)/(\alpha + 1), & m = m_i+1\\
+        0, & \text{otherwise}
+    \end{cases}
+\end{equation}
+(the flipped version $I_2^\flip$ defined similarly to \eqref{eq:linearFlip}) and when applied to Eq. \eqref{eq:fullState} yields
 \begin{subequations}\label{eq:connectionInterpol}
 \begin{align}
     &\begin{aligned}\label{eq:calcUMP1}
-        u_{M+1}^n &= I_2^\flip(x^n_{u_{M+1}})\mathbfcal{U}^n\\
-        &= \frac{\alpha - 1}{\alpha + 1}u_{M}^n + w_0^n - \frac{\alpha - 1}{\alpha + 1}w_1^n
+        u_{M+1}^n = I_2^\flip(x^n_{u_{M+1}})\mathbfcal{U}^n = \frac{\alpha - 1}{\alpha + 1}u_{M}^n + w_0^n - \frac{\alpha - 1}{\alpha + 1}w_1^n
     \end{aligned}\\
     &\ \ \begin{aligned}\label{eq:calcWM1}
-        w_{-1}^n &= I_2(x^n_{w_{-1}})\mathbfcal{U}^n \\
-        &=-\frac{\alpha - 1}{\alpha + 1}u_{M-1}^n + u_{M}^n+ \frac{\alpha - 1}{\alpha + 1}w_{0}^n.
+        w_{-1}^n = I_2(x^n_{w_{-1}})\mathbfcal{U}^n
+        =-\frac{\alpha - 1}{\alpha + 1}u_{M-1}^n + u_{M}^n+ \frac{\alpha - 1}{\alpha + 1}w_{0}^n.
     \end{aligned}
 \end{align}
 \end{subequations}
@@ -242,18 +259,18 @@ Much better behaviour is observed when points of both $\mathbf{u}^n$ and $\mathb
 %     \alpha_\text{I} u_{M-2}^n + \beta\text{I}u_{M-1}^n + \gamma u_{M}^n
 %     \end{bmatrix}.
 % \end{equation}
-As will be shown in Section \ref{sec:results}, quadratic interpolation yields the expected fundamental frequency at all times. One can show that when $N$ is an integer, and thus $\alpha = 0$, Eqs. \eqref{eq:calcUMP1} and \eqref{eq:calcWM1} can be substituted as $w_1^n$ and $u_{M-1}^n$ into Eqs. \eqref{eq:resultUM} and \eqref{eq:resultw0} respectively (as these acted as virtual grid points $u_{M+1}^n$ and $w_{-1}^n$). Then recalling Eq. \eqref{eq:rigid} it can be seen that the system is reduced to \eqref{eq:resultOneConnectedPoint}. % also when interpolation needs to happen.
+As will be shown in the Results section, quadratic interpolation yields the expected fundamental frequency at all times. One can show that when $N$ is an integer, and thus $\alpha = 0$, Eqs. \eqref{eq:calcUMP1} and \eqref{eq:calcWM1} can be substituted as $w_1^n$ and $u_{M-1}^n$ into Eqs. \eqref{eq:resultUM} and \eqref{eq:resultw0} respectively (as these acted as virtual grid points $u_{M+1}^n$ and $w_{-1}^n$). Then recalling Eq. \eqref{eq:rigid} it can be seen that the system is reduced to \eqref{eq:resultOneConnectedPoint}. % also when interpolation needs to happen.
 
 \subsubsection{Adding and removing Grid Points}
-When $c$, and consequently $h$, is decreased and the inner boundary points surpass the virtual points (i.e. $x_{u_M}^n \leq x_{w_{-1}}^n$ and $x_{w_0}^n \geq x_{u_{M+1}}^n$) and $\lfloor N^n\rfloor > \lfloor N^{n-1}\rfloor$, a point is added to the right boundary of $\mathbf{u}$ and the left boundary of $\mathbf{w}$ (for both time indices $n$ and $n-1$) in an alternating fashion: 
+When $c$, and consequently $h$, is decreased and the inner boundary points surpass the virtual points (i.e. $x_{u_M}^n \leq x_{w_{-1}}^n$ and $x_{w_0}^n \geq x_{u_{M+1}}^n$) and $\lfloor N^n\rfloor > \lfloor N^{n-1}\rfloor$, a point is added to the right boundary of $u_l^n$ and the left boundary of $w_l^n$ (for both time indices $n$ and $n-1$) in an alternating fashion: 
 \begin{equation}\label{eq:addingPoint}
-        \begin{cases}\mathbf{u}^n = [\mathbf{u}^n, I_3(x_{u_{M+1}}^n)\mathbf{v}^n]^T & \text{if $\lfloor N^n\rfloor $ is odd},\\
-        \mathbf{w}^n = [I_3^\flip(x_{w_{-1}}^n)\mathbf{v}^n, \mathbf{w}^n]^T & \text{if $\lfloor N^n\rfloor$ is even},
+        \begin{cases}\mathbf{u}^n = [\mathbf{u}^n, I_3\mathbf{v}^n]^T & \text{if $\lfloor N^n\rfloor $ is odd},\\
+        \mathbf{w}^n = [I_3^\flip\mathbf{v}^n, \mathbf{w}^n]^T & \text{if $\lfloor N^n\rfloor$ is even},
         \end{cases}
 \end{equation}
 where 
 \begin{align*}
-\mathbf{v}^n = [u_{M-1}^n, u_M^n, w_0^n, w_1^n],% \quad\text{and}\\
+\mathbf{v}^n = [u_{M-1}^n, u_M^n, w_0^n, w_1^n]^T,% \quad\text{and}\\
 %     \mathbf{v}_\star^n &= [w_1^n, w_0^n, u_M^n, u_{M-1}^n],
 \end{align*}
 and cubic Lagrangian interpolator
@@ -307,7 +324,7 @@ Until now, only adding and removing points in the center of the system has been 
 \subsection{Summary}
 Here, Section \ref{sec:proposedMethod} is summarised and describes the final version of the proposed method.
 
-The complete system consists of two grid functions $u_l^n$ and $w_l^n$ of size of size $M$ and $M_w$. Knowing that $\lambda=1\ \forall n$, Eq. \eqref{eq:updateEq}, written for both grid functions, becomes 
+The method subdivides a grid function with $N+1$ grid points into two grid functions $u_l^n$ and $w_l^n$ with $M+1$ and $M_w+1$ grid points respectively. Knowing that $\lambda=1\ \forall n$, Eq. \eqref{eq:updateEq}, written for both grid functions, becomes 
 \begin{subequations}\label{eq:uwUpdates}
     \begin{align}
         u_l^{n+1} &= u_{l+1}^n + u_{l-1}^n - u_l^{n-1},\label{eq:uUpdate}\\

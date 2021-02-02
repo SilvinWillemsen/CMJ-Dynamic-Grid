@@ -4,7 +4,7 @@ This section shows the analysis of the system presented in the previous section 
 
 % \subsection{Static}
 \subsection{Frequency}
-In order to determine whether the proposed method yields an output with the correct frequency content, a spectrum is taken of the system's output. The system with $N=15.5$ (so $\alpha = 0.5$ in \eqref{eq:bMat}) at a sample rate of $f_\text{s} = 44100$ Hz is compared to the same system with $f_\text{s} = 88200$ Hz resulting in $N=31$ ($\alpha = 0$) for the same $f_0$ according to Eq. \eqref{eq:fundamentalFreq}. See Figure \ref{fig:spectra}.
+In order to determine whether the proposed method yields an output with the correct frequency content in the static case, a spectrum is taken of the system's output. The system with $N=15.5$ (so $\alpha = 0.5$ in \eqref{eq:bMat}) at a sample rate of $f_\text{s} = 44100$ Hz is compared to the same system with $f_\text{s} = 88200$ Hz resulting in $N=31$ ($\alpha = 0$) for the same $f_0$ according to Eq. \eqref{eq:fundamentalFreq}. See Figure \ref{fig:spectra}.
 
 \begin{figure}[ht]
     \centering
@@ -14,12 +14,12 @@ In order to determine whether the proposed method yields an output with the corr
 \caption{\label{fig:spectra}{A system with $N = 15.5$ at $f_\text{s} = 44100$} compared to a system with $N = 31$ at $f_\text{s} = 88200$. Both are supposed to have the same fundamental frequency $f_0$ according to Eq. \eqref{eq:fundamentalFreq}.}
 \end{figure} 
 
-The output of the system at integer $N = 31$ contains partials at perfect integer multiples of $f_0$ (Eq. \eqref{eq:fundamentalFreq}). When this is compared to the output of the system with $N = 15.5$, one can observe that the lower partials are nearly perfectly overlapping, whereas higher partials exhibit slight downwards deviations, exponentially increasing with frequency.
+As expected, the output of the system at integer $N = 31$ contains partials at perfect integer multiples of $f_0$ (Eq. \eqref{eq:fundamentalFreq}). When this is compared to the output of the system with $N = 15.5$, one can observe that the lower partials are nearly perfectly overlapping, whereas higher partials exhibit slight downwards deviations, exponentially increasing with frequency.
 
 % \subsection{Dynamic}
-For a more detailed look at the behaviour of the system, a modal analysis can be performed on system \eqref{eq:totalSystem}. The modal frequency of the $p$'th mode can be retrieved as
+For a more detailed look at the behaviour of the system when $c$ is changed dynamically, a modal analysis can be performed on system \eqref{eq:totalSystem}. For slow variations of $c$, the modal frequency of the $p$'th mode can be retrieved as
 \begin{equation}\label{eq:modalAnalysis}
-    f_p = \frac{1}{2\pi k}\cos^{-1}\left(\frac{1}{2}\text{eig}_p(\mathbf{B})\right).
+    f_p \approx \frac{1}{2\pi k}\cos^{-1}\left(\frac{1}{2}\text{eig}_p(\mathbf{B})\right).
 \end{equation}
 
 As a test case, the wave speed is dynamically varied from $c = 2940$ ($N = 15$) to $c = 2205$ ($N = 20$), changing $\mathbf{B}$ and thus the modal frequencies over time. The displacement correction presented in Eq. \eqref{eq:dispCorr} is not included in this analysis ($\epsilon \gg 1$), but will be elaborated on in Section \ref{sec:dispCorrRes}. The results of the analysis are shown in Figure \ref{fig:modalAnalysis}. Figure \ref{fig:spectrogram} shows the resulting spectrogram of the system excited at $n=0$ with a narrow raised cosine and the output retrieved at $u_1$.
